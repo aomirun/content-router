@@ -1,6 +1,8 @@
-# Buffer Package
+# Buffer 包
 
-Buffer包提供了一个高效、可重用的缓冲区实现，专为消息处理场景设计。它支持零拷贝操作，减少内存分配，提高性能。
+[English Version](README_en.md)
+
+Buffer 包提供了一个高效的缓冲区管理机制，通过接口设计和对象池技术来减少内存分配和复制。
 
 ## 功能特性
 

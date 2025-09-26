@@ -1,5 +1,7 @@
 # Content Router - 高性能路由器
 
+[English Version](README_en.md)
+
 Content Router是一个高性能的路由器框架，专为Go语言设计。它专注于基于消息内容的路由处理，与Go 1.22的HTTP路径路由形成互补。通过细粒度接口设计和对象池技术，实现了高效的内存管理和路由处理。
 
 ## 目录

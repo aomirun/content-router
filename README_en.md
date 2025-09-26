@@ -1,5 +1,7 @@
 # Content Router - High-Performance Router
 
+[中文版本](README.md)
+
 Content Router is a high-performance router framework designed for Go language. It focuses on content-based routing processing, complementing Go 1.22's HTTP path routing. Through fine-grained interface design and object pool technology, it achieves efficient memory management and routing processing.
 
 ## Table of Contents

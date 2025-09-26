@@ -1,5 +1,7 @@
 # Router Package
 
+[中文版本](README.md)
+
 The router package is a core component of the content-router system, responsible for routing content based on matching rules and processing it through a chain of middleware and handlers.
 
 ## Overview

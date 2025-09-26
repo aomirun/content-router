@@ -1,6 +1,8 @@
-# Context Package
+# Context 包
 
-Context包提供了一个增强的上下文实现，专为消息路由框架设计。它扩展了标准库的context.Context，增加了键值存储和缓冲区访问功能。
+[English Version](README_en.md)
+
+Context 包提供了一个增强的上下文实现，扩展了标准库的 context.Context 接口，增加了键值存储和缓冲区访问功能。
 
 ## 功能特性
 

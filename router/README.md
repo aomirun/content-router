@@ -1,6 +1,8 @@
-# Router Package
+# Router 包
 
-Router包是消息路由框架的核心组件，提供了基于技术的消息路由功能。它通过组合多种设计模式（如责任链模式、中间件模式等）来实现灵活且高性能的消息处理流程。
+[English Version](README_en.md)
+
+Router 包是 content-router 系统的核心组件，负责根据匹配规则路由内容，并通过中间件链和处理器处理内容。
 
 ## 功能特性
 

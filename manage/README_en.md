@@ -1,5 +1,7 @@
 # Manage Package
 
+[中文版本](README.md)
+
 The Manage package provides a buffer manager implementation for efficiently managing buffer resources in message processing. It is based on the object pool mechanism of the buffer package and provides unified interfaces for acquiring and releasing buffers.
 
 ## Features

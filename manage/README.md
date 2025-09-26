@@ -1,4 +1,6 @@
-# Manage Package
+# Manage 包
+
+[English Version](README_en.md)
 
 Manage包提供了一个缓冲区管理器实现，用于高效管理消息处理中的缓冲区资源。它基于buffer包的对象池机制，提供了统一的缓冲区获取和释放接口。
 
