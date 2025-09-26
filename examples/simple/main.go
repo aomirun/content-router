@@ -5,24 +5,24 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/aomirun/content-router/api"
+	"github.com/aomirun/content-router"
 )
 
 func main() {
-	fmt.Println("Router API package is working correctly!")
+	fmt.Println("Router root package is working correctly!")
 
 	// 创建路由器
-	router := api.NewRouter()
+	router := contentrouter.NewRouter()
 
 	// 注册路由处理器
-	router.Match("Hello", func(ctx api.Context) error {
+	router.Match("Hello", func(ctx contentrouter.Context) error {
 		// 处理逻辑
 		fmt.Printf("Handling route with buffer: %s\n", string(ctx.Buffer().Get()))
 		return nil
 	})
 
 	// 创建缓冲区并写入数据
-	buf := api.NewBuffer()
+	buf := contentrouter.NewBuffer()
 	buf.WriteString("Hello, World!")
 
 	// 路由处理
@@ -34,13 +34,13 @@ func main() {
 	fmt.Println("Simple example completed successfully!")
 
 	// 验证接口导入
-	var _ api.Context = nil
-	var _ api.Buffer = nil
-	var _ api.Router = nil
-	var _ api.Handler = nil
-	var _ api.Matcher = nil
-	var _ api.MiddlewareFunc = nil
-	var _ api.Pipeline = nil
+	var _ contentrouter.Context = nil
+	var _ contentrouter.Buffer = nil
+	var _ contentrouter.Router = nil
+	var _ contentrouter.Handler = nil
+	var _ contentrouter.Matcher = nil
+	var _ contentrouter.MiddlewareFunc = nil
+	var _ contentrouter.Pipeline = nil
 
 	fmt.Println("All interfaces are properly imported and accessible!")
 }

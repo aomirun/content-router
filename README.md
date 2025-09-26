@@ -31,7 +31,6 @@ Content Router是一个高性能、的路由器框架，专为Go语言设计。�
 ## 包结构
 
 ```
-├── api              # 统一API入口
 ├── buffer           # 缓冲区管理
 ├── context          # 上下文管理
 ├── manage           # 资源管理
@@ -52,7 +51,18 @@ Content Router是一个高性能、的路由器框架，专为Go语言设计。�
 - 核心接口的类型别名（Router、Context、Buffer等）
 - 工厂函数（NewRouter、NewBuffer、NewContext）
 
-对于大多数用户来说，只需导入`api`包即可使用所有功能，无需关心内部包结构。
+从v1.1.0版本开始，我们还提供了根目录的便捷包，用户可以直接导入主包来使用所有功能：
+
+```go
+import "github.com/aomirun/content-router"
+
+// 使用示例
+router := contentrouter.NewRouter()
+buf := contentrouter.NewBuffer()
+ctx := contentrouter.NewContext(context.Background(), buf)
+```
+
+对于大多数用户来说，可以使用根目录的便捷包或`api`包来使用所有功能，无需关心内部包结构。
 只有在需要细粒度控制或深入了解实现细节时，才需要直接导入子包。
 
 Content Router专注于基于消息内容的路由处理，与Go 1.22的HTTP路径路由形成互补，为Go应用提供更全面的路由解决方案。
@@ -83,9 +93,30 @@ Content Router专注于基于消息内容的路由处理，与Go 1.22的HTTP路�
 
 ## <a name="usage-examples"></a>使用示例
 
-对于大多数用户，推荐使用`api`包作为入口，它提供了所有核心功能的统一访问接口。
+对于大多数用户，推荐使用根目录便捷包或`api`包作为入口，它们提供了所有核心功能的统一访问接口。
 
-### 简单使用
+### 简单使用（使用根目录便捷包）
+```go
+import "github.com/aomirun/content-router"
+
+// 创建路由器（通过根目录便捷包）
+router := contentrouter.NewRouter()
+
+// 注册路由
+router.Match("Hello", func(ctx contentrouter.Context) error {
+    // 处理逻辑
+    return nil
+})
+
+// 创建缓冲区并写入数据（通过根目录便捷包）
+buf := contentrouter.NewBuffer()
+buf.WriteString("Hello, World!")
+
+// 路由处理
+router.Route(context.Background(), buf)
+```
+
+### 简单使用（使用api包）
 ```go
 // 创建路由器（通过api包）
 router := api.NewRouter()
@@ -108,6 +139,32 @@ router.Route(context.Background(), buf)
 
 这个示例展示了如何将Content Router集成到HTTP服务器中。虽然Go 1.22增强了HTTP路径路由功能，但Content Router专注于基于消息内容的路由处理，两者可以互补使用。
 
+使用根目录便捷包：
+```go
+import "github.com/aomirun/content-router"
+
+func httpHandler(w http.ResponseWriter, r *http.Request) {
+    // 创建缓冲区（通过根目录便捷包）
+    buf := contentrouter.NewBuffer()
+    buf.WriteString("HTTP request: " + r.URL.Path)
+    
+    // 创建路由器（通过根目录便捷包）
+    router := contentrouter.NewRouter()
+    
+    // 注册基于内容的路由规则
+    // 这里根据消息内容而不是URL路径进行路由
+    router.Match("Hello", func(ctx contentrouter.Context) error {
+        response := "Processed: " + string(ctx.Buffer().Get())
+        fmt.Fprintf(w, "%s", response)
+        return nil
+    })
+    
+    // 处理请求
+    router.Route(context.Background(), buf)
+}
+```
+
+使用api包：
 ```go
 func httpHandler(w http.ResponseWriter, r *http.Request) {
     // 创建缓冲区（通过api包）
@@ -158,6 +215,29 @@ router.Route(ctx, buf)
 
 Content Router支持中间件功能，可以用于日志记录、错误恢复等：
 
+使用根目录便捷包：
+```go
+import "github.com/aomirun/content-router"
+
+// 创建路由器
+router := contentrouter.NewRouter()
+
+// 添加中间件（注意：中间件仍然需要从middleware包导入）
+router.Use(
+    // 日志中间件
+    middleware.Logging(),
+    // 错误恢复中间件
+    middleware.Recovery(),
+)
+
+// 注册路由
+router.Match("Hello", func(ctx contentrouter.Context) error {
+    fmt.Println("处理Hello消息")
+    return nil
+})
+```
+
+使用api包：
 ```go
 // 创建路由器
 router := api.NewRouter()

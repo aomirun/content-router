@@ -5,23 +5,23 @@ import (
 	"testing"
 	"time"
 
-	"github.com/aomirun/content-router/api"
+	"github.com/aomirun/content-router"
 	"github.com/aomirun/content-router/buffer"
 	"github.com/aomirun/content-router/router"
 )
 
 func BenchmarkRouter_Route(b *testing.B) {
 	// 创建路由器
-	router := api.NewRouter()
+	router := contentrouter.NewRouter()
 
 	// 注册路由
-	router.Match("Hello", func(ctx api.Context) error {
+	router.Match("Hello", func(ctx contentrouter.Context) error {
 		// 简单处理逻辑
 		return nil
 	})
 
 	// 创建缓冲区
-	buf := api.NewBuffer()
+	buf := contentrouter.NewBuffer()
 	buf.WriteString("Hello, World!")
 
 	// 重置计时器
@@ -38,22 +38,22 @@ func BenchmarkRouter_Route(b *testing.B) {
 
 func BenchmarkRouter_RouteWithMiddleware(b *testing.B) {
 	// 创建路由器
-	router := api.NewRouter()
+	router := contentrouter.NewRouter()
 
 	// 添加中间件
-	router.Use(func(ctx api.Context, next api.HandlerFunc) error {
+	router.Use(func(ctx contentrouter.Context, next contentrouter.HandlerFunc) error {
 		// 简单中间件逻辑
 		return next(ctx)
 	})
 
 	// 注册路由
-	router.Match("Hello", func(ctx api.Context) error {
+	router.Match("Hello", func(ctx contentrouter.Context) error {
 		// 简单处理逻辑
 		return nil
 	})
 
 	// 创建缓冲区
-	buf := api.NewBuffer()
+	buf := contentrouter.NewBuffer()
 	buf.WriteString("Hello, World!")
 
 	// 重置计时器
@@ -70,7 +70,7 @@ func BenchmarkRouter_RouteWithMiddleware(b *testing.B) {
 
 func BenchmarkBuffer_AcquireRelease(b *testing.B) {
 	// 创建路由器以获取BufferManager
-	router := api.NewRouter()
+	router := contentrouter.NewRouter()
 	bufferManager := router.BufferManager()
 
 	// 重置计时器
@@ -85,8 +85,8 @@ func BenchmarkBuffer_AcquireRelease(b *testing.B) {
 
 func BenchmarkContext_ValueStore(b *testing.B) {
 	// 创建缓冲区和上下文
-	buf := api.NewBuffer()
-	ctx := api.NewContext(context.Background(), buf)
+	buf := contentrouter.NewBuffer()
+	ctx := contentrouter.NewContext(context.Background(), buf)
 
 	// 重置计时器
 	b.ResetTimer()
@@ -100,14 +100,14 @@ func BenchmarkContext_ValueStore(b *testing.B) {
 
 func BenchmarkContextPool_AcquireRelease(b *testing.B) {
 	// 创建缓冲区
-	buf := api.NewBuffer()
+	buf := contentrouter.NewBuffer()
 
 	// 重置计时器
 	b.ResetTimer()
 
 	// 运行基准测试
 	for i := 0; i < b.N; i++ {
-		ctx := api.NewContext(context.Background(), buf)
+		ctx := contentrouter.NewContext(context.Background(), buf)
 		// 释放上下文到池中
 		if c, ok := ctx.(interface{ Reset() }); ok {
 			c.Reset()
@@ -117,8 +117,8 @@ func BenchmarkContextPool_AcquireRelease(b *testing.B) {
 
 func BenchmarkContext_Methods(b *testing.B) {
 	// 创建缓冲区和上下文
-	buf := api.NewBuffer()
-	ctx := api.NewContext(context.Background(), buf)
+	buf := contentrouter.NewBuffer()
+	ctx := contentrouter.NewContext(context.Background(), buf)
 
 	// 设置测试数据
 	ctx.Set("string_key", "test_string")
@@ -148,8 +148,8 @@ func BenchmarkContext_Methods(b *testing.B) {
 
 func BenchmarkContext_Keys(b *testing.B) {
 	// 创建缓冲区和上下文
-	buf := api.NewBuffer()
-	ctx := api.NewContext(context.Background(), buf)
+	buf := contentrouter.NewBuffer()
+	ctx := contentrouter.NewContext(context.Background(), buf)
 
 	// 设置测试数据
 	ctx.Set("string_key", "test_string")
@@ -170,8 +170,8 @@ func BenchmarkContext_Keys(b *testing.B) {
 
 func BenchmarkContext_Methods_WithoutKeys(b *testing.B) {
 	// 创建缓冲区和上下文
-	buf := api.NewBuffer()
-	ctx := api.NewContext(context.Background(), buf)
+	buf := contentrouter.NewBuffer()
+	ctx := contentrouter.NewContext(context.Background(), buf)
 
 	// 设置测试数据
 	ctx.Set("string_key", "test_string")
@@ -201,9 +201,9 @@ func BenchmarkContext_Methods_WithoutKeys(b *testing.B) {
 
 func BenchmarkMatcher_Prefix(b *testing.B) {
 	// 创建缓冲区和上下文
-	buf := api.NewBuffer()
+	buf := contentrouter.NewBuffer()
 	buf.WriteString("Hello, World!")
-	ctx := api.NewContext(context.Background(), buf)
+	ctx := contentrouter.NewContext(context.Background(), buf)
 
 	// 创建匹配器
 	matcher := router.PrefixMatcher("Hello")
@@ -219,9 +219,9 @@ func BenchmarkMatcher_Prefix(b *testing.B) {
 
 func BenchmarkMatcher_Suffix(b *testing.B) {
 	// 创建缓冲区和上下文
-	buf := api.NewBuffer()
+	buf := contentrouter.NewBuffer()
 	buf.WriteString("Hello, World!")
-	ctx := api.NewContext(context.Background(), buf)
+	ctx := contentrouter.NewContext(context.Background(), buf)
 
 	// 创建匹配器
 	matcher := router.SuffixMatcher("World!")
@@ -237,9 +237,9 @@ func BenchmarkMatcher_Suffix(b *testing.B) {
 
 func BenchmarkMatcher_Contains(b *testing.B) {
 	// 创建缓冲区和上下文
-	buf := api.NewBuffer()
+	buf := contentrouter.NewBuffer()
 	buf.WriteString("Hello, World!")
-	ctx := api.NewContext(context.Background(), buf)
+	ctx := contentrouter.NewContext(context.Background(), buf)
 
 	// 创建匹配器
 	matcher := router.ContainsMatcher("World")
@@ -255,7 +255,7 @@ func BenchmarkMatcher_Contains(b *testing.B) {
 
 func BenchmarkPipeline_WithMiddleware(b *testing.B) {
 	// 创建路由器
-	r := api.NewRouter()
+	r := contentrouter.NewRouter()
 
 	// 创建匹配器
 	matcher := router.PrefixMatcher("test")
@@ -264,18 +264,18 @@ func BenchmarkPipeline_WithMiddleware(b *testing.B) {
 	pipeline := r.Pipeline(matcher)
 
 	// 添加中间件
-	pipeline.Use(func(ctx api.Context, next api.HandlerFunc) error {
+	pipeline.Use(func(ctx contentrouter.Context, next contentrouter.HandlerFunc) error {
 		return next(ctx)
 	})
 
-	pipeline.Use(func(ctx api.Context, next api.HandlerFunc) error {
+	pipeline.Use(func(ctx contentrouter.Context, next contentrouter.HandlerFunc) error {
 		return next(ctx)
 	})
 
 	// 创建缓冲区和上下文
-	buf := api.NewBuffer()
+	buf := contentrouter.NewBuffer()
 	buf.WriteString("test data")
-	ctx := api.NewContext(context.Background(), buf)
+	ctx := contentrouter.NewContext(context.Background(), buf)
 
 	// 重置计时器
 	b.ResetTimer()
@@ -288,7 +288,7 @@ func BenchmarkPipeline_WithMiddleware(b *testing.B) {
 
 func BenchmarkPipeline_WithoutMiddleware(b *testing.B) {
 	// 创建路由器
-	r := api.NewRouter()
+	r := contentrouter.NewRouter()
 
 	// 创建匹配器
 	matcher := router.PrefixMatcher("test")
@@ -297,9 +297,9 @@ func BenchmarkPipeline_WithoutMiddleware(b *testing.B) {
 	pipeline := r.Pipeline(matcher)
 
 	// 创建缓冲区和上下文
-	buf := api.NewBuffer()
+	buf := contentrouter.NewBuffer()
 	buf.WriteString("test data")
-	ctx := api.NewContext(context.Background(), buf)
+	ctx := contentrouter.NewContext(context.Background(), buf)
 
 	// 重置计时器
 	b.ResetTimer()

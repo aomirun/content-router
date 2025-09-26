@@ -5,20 +5,20 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/aomirun/content-router/api"
+	"github.com/aomirun/content-router"
 	"github.com/aomirun/content-router/middleware"
 )
 
 func main() {
 	// 创建路由器实例
-	r := api.NewRouter()
+	r := contentrouter.NewRouter()
 
 	// 注册中间件
 	r.Use(middleware.LoggingMiddleware())
 	r.Use(middleware.RecoveryMiddleware())
 
 	// 注册路由处理器 - 匹配包含"trigger"的路径
-	r.Match("trigger", func(ctx api.Context) error {
+	r.Match("trigger", func(ctx contentrouter.Context) error {
 		// 模拟处理时间
 		time.Sleep(100 * time.Millisecond)
 
@@ -53,7 +53,7 @@ func main() {
 		fmt.Printf("\n=== Test Case %d ===\n", i+1)
 
 		// 创建buffer
-		buf := api.NewBuffer()
+		buf := contentrouter.NewBuffer()
 		buf.Write([]byte(data))
 
 		// 处理数据
