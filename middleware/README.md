@@ -40,20 +40,20 @@ import (
     "fmt"
     "time"
 
-    "github.com/aomirun/content-router/api"
+    "github.com/aomirun/content-router"
     "github.com/aomirun/content-router/middleware"
 )
 
 func main() {
     // 创建路由器实例
-    r := api.NewRouter()
+    r := contentrouter.NewRouter()
     
     // 注册中间件
     r.Use(middleware.LoggingMiddleware())
     r.Use(middleware.RecoveryMiddleware())
     
     // 注册路由处理器
-    r.Match("test", func(ctx api.Context) error {
+    r.Match("test", func(ctx contentrouter.Context) error {
         // 模拟处理时间
         time.Sleep(100 * time.Millisecond)
         
@@ -77,7 +77,7 @@ func main() {
     })
     
     // 创建测试数据
-    buf := api.NewBuffer()
+    buf := contentrouter.NewBuffer()
     buf.Write([]byte("test_data"))
     
     // 处理数据
