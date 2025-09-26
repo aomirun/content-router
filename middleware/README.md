@@ -61,9 +61,9 @@ func main() {
         data := ctx.Buffer().Get()
         fmt.Printf("正在处理数据: %s\n", string(data))
         
-        // 模拟恐慌情况
+        // 模拟panic情况
         if string(data) == "trigger_panic" {
-            panic("为演示而模拟的恐慌")
+            panic("为演示而模拟的panic")
         }
         
         // 模拟处理错误
